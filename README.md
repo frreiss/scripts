@@ -1,2 +1,3 @@
 # scripts
-Useful scripts for various development tasks
+Fred's useful scripts for various development tasks.
+
