@@ -1,13 +1,14 @@
 #! /usr/bin/env python3
-"""Creates a new local branch for a TensorFlow issue.
+"""Creates or checks out a new local branch for a TensorFlow issue.
 
 Does NOT commit any changes to Github, but DOES set things up so that "git
 push" will commit those changes.
 
 Usage:
-    ~/scripts/tf_branch.py <issue #>
+    ~/scripts/tf_branch.py [-c] <issue #>
 
 Where:
+    -c means create branch before checking it out
     <issue #> is the ID of the Github issue to work on
 """
 
@@ -25,17 +26,30 @@ from subprocess import run
 _TF_REPO_URL = "https://github.com/tensorflow/tensorflow.git"
 _MY_TF_REPO_URL = "https://github.com/frreiss/tensorflow-fred.git"
 
-_PYTHON_VERSION=3.6
+_PYTHON_VERSION=3
+
+_USAGE = "Usage: {} [-c] <issue #>".format(sys.argv[0])
 
 ################################################################################
 # BEGIN SCRIPT
 
-def main():
-    if len(sys.argv) != 2:
-        print ("Usage: {} <issue #>".format(sys.argv[0]))
-        sys.exit()
+def print_usage_and_exit():
+    print(_USAGE)
+    sys.exit()
 
-    issue_num = sys.argv[1]
+def main():
+    if len(sys.argv) != 2 and len(sys.argv) != 3:
+        print_usage_and_exit()
+
+    if 2 == len(sys.argv):
+        issue_num = sys.argv[1]
+        create_branch = False
+    elif 3 == len(sys.argv): 
+        if ("-c" != sys.argv[1]):
+            print_usage_and_exit()
+        issue_num = sys.argv[2]
+        create_branch = True
+        
     dir_name = "tf-" + issue_num
     branch_name = "issue-" + issue_num
 
@@ -43,7 +57,10 @@ def main():
     run(["git", "clone", _MY_TF_REPO_URL, dir_name])
     os.chdir(dir_name)
     run(["git", "remote", "add", "upstream", _TF_REPO_URL])
-    run(["git", "branch", branch_name])
+
+    if create_branch:
+        run(["git", "branch", branch_name])
+
     run(["git", "checkout", branch_name])
 
     # Set up virtualenv for this source tree
@@ -54,7 +71,7 @@ def main():
     run(["env/bin/pip", "install", "numpy", "dev", "wheel"])
     
     # Install additional undocumented dependencies required to run tests.
-    run(["env/bin/pip", "install", "autograd", "portpicker", "grpcio"])
+    run(["env/bin/pip", "install", "autograd", "portpicker", "grpcio", "scipy"])
 
     print("Virtualenv installed in ./env.\n"
           "Run \"source ./env/bin/activate\" before running ./configure")
