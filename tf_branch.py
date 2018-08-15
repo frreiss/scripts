@@ -1,6 +1,9 @@
 #! /usr/bin/env python3
 """Creates or checks out a new local branch for a TensorFlow issue.
 
+Also sets up a virtualenv in the local copy of the branch with all the 
+necessary packages for building TensorFlow and running the tests.
+
 Does NOT commit any changes to Github, but DOES set things up so that "git
 push" will commit those changes.
 
@@ -69,6 +72,10 @@ def main():
     # Install required deps; see https://www.tensorflow.org/install/install_sources,
     # under "Install TensorFlow Python dependencies"
     run(["env/bin/pip", "install", "numpy", "dev", "wheel"])
+    
+    # Install additional undocumented dependencies required to get around
+    # issue 21518
+    run(["env/bin/pip", "install", "keras_applications"])
     
     # Install additional undocumented dependencies required to run tests.
     run(["env/bin/pip", "install", "autograd", "portpicker", "grpcio", "scipy"])
