@@ -1,8 +1,10 @@
 #! /usr/bin/env python3
 """Creates or checks out a new local branch for a TensorFlow issue.
 
-Also sets up a virtualenv in the local copy of the branch with all the 
+Also sets up an Anaconda virtualenv in the local copy of the branch with all the 
 necessary packages for building TensorFlow and running the tests.
+
+Requires Anaconda for virtualenv creation.
 
 Does NOT commit any changes to Github, but DOES set things up so that "git
 push" will commit those changes.
@@ -66,22 +68,41 @@ def main():
 
     run(["git", "checkout", branch_name])
 
-    # Set up virtualenv for this source tree
-    run(["virtualenv", "env", "--python=python{}".format(_PYTHON_VERSION)])
+    # Set up virtualenv for building this source tree
+    run(["conda", "create", "-y", "--prefix", "./env", 
+        "python={}".format(_PYTHON_VERSION),
+        "numpy", "wheel",
+        # Install additional undocumented dependencies required to run tests.
+        "autograd", "portpicker", "grpcio", "scipy",
+        "-c", "conda-forge"])
+    #run(["virtualenv", "env", "--python=python{}".format(_PYTHON_VERSION)])
+
+    # Set up second virtualenv for testing our pip artifacts
+    run(["conda", "create", "-y", "--prefix", "./testenv", 
+        "python={}".format(_PYTHON_VERSION),
+        "numpy", "scipy", "jupyterlab",
+        "keras-applications",   # See issue 21518
+        "-c", "conda-forge"])
+
+    # Install additional dependencies only available on pypi
+    #run(["source", "activate", "./env"])
+    #run(["pip", "install", "keras_applications"]) # See issue 21518
+    # See https://www.tensorflow.org/install/install_sources,
+    # under "Install TensorFlow Python dependencies"
+    #run(["pip", "install", "dev"]) 
+    #run(["deactivate"])
 
     # Install required deps; see https://www.tensorflow.org/install/install_sources,
     # under "Install TensorFlow Python dependencies"
-    run(["env/bin/pip", "install", "numpy", "dev", "wheel"])
+    #run(["env/bin/pip", "install", "numpy", "dev", "wheel"])
     
-    # Install additional undocumented dependencies required to get around
-    # issue 21518
-    run(["env/bin/pip", "install", "keras_applications"])
+    #run(["env/bin/pip", "install", "keras_applications"])
     
     # Install additional undocumented dependencies required to run tests.
-    run(["env/bin/pip", "install", "autograd", "portpicker", "grpcio", "scipy"])
+    #run(["env/bin/pip", "install", "autograd", "portpicker", "grpcio", "scipy"])
 
-    print("Virtualenv installed in ./env.\n"
-          "Run \"source ./env/bin/activate\" before running ./configure")
+    print("Anaconda virtualenv installed in ./env.\n"
+          "Run \"conda activate ./env\" before running ./configure")
     
 
 if __name__ == '__main__':
