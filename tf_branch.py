@@ -72,6 +72,7 @@ def main():
     run(["conda", "create", "-y", "--prefix", "./env", 
         "python={}".format(_PYTHON_VERSION),
         "numpy", "wheel",
+        "keras-applications",   # See issue 21518
         # Install additional undocumented dependencies required to run tests.
         "autograd", "portpicker", "grpcio", "scipy",
         "-c", "conda-forge"])
@@ -81,7 +82,6 @@ def main():
     run(["conda", "create", "-y", "--prefix", "./testenv", 
         "python={}".format(_PYTHON_VERSION),
         "numpy", "scipy", "jupyterlab",
-        "keras-applications",   # See issue 21518
         "-c", "conda-forge"])
 
     # Install additional dependencies only available on pypi
