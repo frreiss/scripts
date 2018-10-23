@@ -47,7 +47,7 @@ conda activate ./env
 # Install unofficial requirements, i.e. not mentioned in the docs, but tests
 # will fail without them.
 # TODO: Revisit these periodically
-conda install -y autograd portpicker grpcio scipy 
+conda install -y autograd portpicker grpcio scipy -c conda-forge
 
 # Install TensorFlow and keras-applications, both of which are also unofficial
 # requirements. We install them from pip because the version in conda-forge is
@@ -59,7 +59,7 @@ conda deactivate
 ################################################################################
 # testenv
 conda create -y --prefix ./testenv \
-    python=${PYTHON_VERSION}
+    python=${PYTHON_VERSION} \
     numpy wheel \
     autograd portpicker grpcio scipy \
     -c conda-forge
