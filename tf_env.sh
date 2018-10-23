@@ -11,9 +11,27 @@
 # arguments.
 #
 # Requires that conda be installed and set up for calling from bash scripts.
+#
+# Also requires that you set the environment variable CONDA_HOME to the
+# location of the root of your anaconda/miniconda distribution.
 ################################################################################
 
 PYTHON_VERSION=3
+
+############################
+# HACK ALERT *** HACK ALERT 
+# The friendly folks at Anaconda thought it would be a good idea to make the
+# "conda" command a shell function. 
+# See https://github.com/conda/conda/issues/7126
+# The following workaround will probably be fragile.
+if [ -z "$CONDA_HOME" ]
+then 
+    echo "Error: CONDA_HOME not set"
+    exit
+fi
+. ${CONDA_HOME}/etc/profile.d/conda.sh
+# END HACK
+############################
 
 ################################################################################
 # env
