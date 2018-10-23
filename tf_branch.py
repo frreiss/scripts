@@ -74,21 +74,22 @@ def main():
         "numpy", "wheel",
         # Install additional undocumented dependencies required to run tests.
         "autograd", "portpicker", "grpcio", "scipy",
-        "-c", "conda-forge"])
+        "-c", "conda-forge"], shell=True)
+    # Note the shell=True; conda cmd only works from a shell on Linux.
     
     # TensorFlow is built against the latest version of TensorFlow in PyPI, 
     # not conda-forge.
-    run(["conda", "activate", "./env"])
+    run(["conda", "activate", "./env"], shell=True)
     run(["pip", "install", "tensorflow", 
         "tensorflow-estimator", # Temporary until TF 1.12 is in PyPI
         "keras-applications"]) # See issue 21518
-    run(["conda deactivate"])
+    run(["conda deactivate"], shell=True)
 
     # Set up second virtualenv for testing our pip artifacts
     run(["conda", "create", "-y", "--prefix", "./testenv", 
         "python={}".format(_PYTHON_VERSION),
         "numpy", "scipy", "jupyterlab",
-        "-c", "conda-forge"])
+        "-c", "conda-forge"], shell=True)
 
     # Install additional dependencies only available on pypi
     
