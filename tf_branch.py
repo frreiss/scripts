@@ -72,11 +72,17 @@ def main():
     run(["conda", "create", "-y", "--prefix", "./env", 
         "python={}".format(_PYTHON_VERSION),
         "numpy", "wheel",
-        "keras-applications",   # See issue 21518
         # Install additional undocumented dependencies required to run tests.
         "autograd", "portpicker", "grpcio", "scipy",
         "-c", "conda-forge"])
-    #run(["virtualenv", "env", "--python=python{}".format(_PYTHON_VERSION)])
+    
+    # TensorFlow is built against the latest version of TensorFlow in PyPI, 
+    # not conda-forge.
+    run(["conda", "activate", "./env"])
+    run(["pip", "install", "tensorflow", 
+        "tensorflow-estimator", # Temporary until TF 1.12 is in PyPI
+        "keras-applications"]) # See issue 21518
+    run(["conda deactivate"])
 
     # Set up second virtualenv for testing our pip artifacts
     run(["conda", "create", "-y", "--prefix", "./testenv", 
@@ -85,13 +91,7 @@ def main():
         "-c", "conda-forge"])
 
     # Install additional dependencies only available on pypi
-    #run(["source", "activate", "./env"])
-    #run(["pip", "install", "keras_applications"]) # See issue 21518
-    # See https://www.tensorflow.org/install/install_sources,
-    # under "Install TensorFlow Python dependencies"
-    #run(["pip", "install", "dev"]) 
-    #run(["deactivate"])
-
+    
     # Install required deps; see https://www.tensorflow.org/install/install_sources,
     # under "Install TensorFlow Python dependencies"
     #run(["env/bin/pip", "install", "numpy", "dev", "wheel"])
