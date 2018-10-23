@@ -69,42 +69,9 @@ def main():
     run(["git", "checkout", branch_name])
 
     # Set up virtualenv for building this source tree
-    run(["conda", "create", "-y", "--prefix", "./env", 
-        "python={}".format(_PYTHON_VERSION),
-        "numpy", "wheel",
-        # Install additional undocumented dependencies required to run tests.
-        "autograd", "portpicker", "grpcio", "scipy",
-        "-c", "conda-forge"], shell=True)
-    # Note the shell=True; conda cmd only works from a shell on Linux.
-    
-    # TensorFlow is built against the latest version of TensorFlow in PyPI, 
-    # not conda-forge.
-    run(["conda", "activate", "./env"], shell=True)
-    run(["pip", "install", "tensorflow", 
-        "tensorflow-estimator", # Temporary until TF 1.12 is in PyPI
-        "keras-applications"]) # See issue 21518
-    run(["conda deactivate"], shell=True)
+    run("~/scripts/tf_env.sh", shell=True)
 
-    # Set up second virtualenv for testing our pip artifacts
-    run(["conda", "create", "-y", "--prefix", "./testenv", 
-        "python={}".format(_PYTHON_VERSION),
-        "numpy", "scipy", "jupyterlab",
-        "-c", "conda-forge"], shell=True)
-
-    # Install additional dependencies only available on pypi
-    
-    # Install required deps; see https://www.tensorflow.org/install/install_sources,
-    # under "Install TensorFlow Python dependencies"
-    #run(["env/bin/pip", "install", "numpy", "dev", "wheel"])
-    
-    #run(["env/bin/pip", "install", "keras_applications"])
-    
-    # Install additional undocumented dependencies required to run tests.
-    #run(["env/bin/pip", "install", "autograd", "portpicker", "grpcio", "scipy"])
-
-    print("Anaconda virtualenv installed in ./env.\n"
-          "Run \"conda activate ./env\" before running ./configure")
-    
+   
 
 if __name__ == '__main__':
     main()
