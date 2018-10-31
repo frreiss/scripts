@@ -49,6 +49,9 @@ conda activate ./env
 # TODO: Revisit these periodically
 conda install -y autograd portpicker grpcio scipy -c conda-forge
 
+# Additional requirements for running the tests under contrib
+conda install -y scikit-learn
+
 # Install TensorFlow and keras-applications, both of which are also unofficial
 # requirements. We install them from pip because the version in conda-forge is
 # sometimes too old to work with the master build of TF.
@@ -60,8 +63,7 @@ conda deactivate
 # testenv
 conda create -y --prefix ./testenv \
     python=${PYTHON_VERSION} \
-    numpy wheel \
-    autograd portpicker grpcio scipy \
+    numpy pandas jupyterlab \
     -c conda-forge
 
         
