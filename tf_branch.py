@@ -31,8 +31,6 @@ from subprocess import run
 _TF_REPO_URL = "https://github.com/tensorflow/tensorflow.git"
 _MY_TF_REPO_URL = "https://github.com/frreiss/tensorflow-fred.git"
 
-_PYTHON_VERSION=3
-
 _USAGE = "Usage: {} [-c] <issue #>".format(sys.argv[0])
 
 ################################################################################
