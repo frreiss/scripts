@@ -47,8 +47,12 @@ conda activate ./env
 # Install unofficial requirements, i.e. not mentioned in the docs, but tests
 # will fail without them.
 # TODO: Revisit these periodically
-conda install -y autograd portpicker grpcio scipy \
-    keras-applications keras-preprocessing \
+conda install -y portpicker grpcio scipy \
+    keras-applications keras-preprocessing 
+    #-c conda-forge
+
+# Some prereqs are only available from conda-forge
+conda install -y autograd \
     -c conda-forge
 
 # Additional requirements for running the tests under contrib
@@ -57,7 +61,7 @@ conda install -y scikit-learn
 # Requirements that must be installed from pip because the conda version is
 # not kept sufficiently up to date. TODO: Revisit this list and move things to
 # conda install.
-pip install tensorflow-estimator
+#pip install tensorflow-estimator
 
 # Install TensorFlow and keras-applications, both of which are also unofficial
 # requirements. We install them from pip because the version in conda-forge is
@@ -70,8 +74,8 @@ conda deactivate
 # testenv
 conda create -y --prefix ./testenv \
     python=${PYTHON_VERSION} \
-    numpy pandas jupyterlab \
-    -c conda-forge
+    numpy pandas jupyterlab 
+    #-c conda-forge
 
         
 echo << EOM

@@ -28,8 +28,8 @@ from subprocess import run
 # CONSTANTS
 
 # Github URLs go here
-_TF_REPO_URL = "https://github.com/CODAIT/graph_def_editor.git"
-_MY_TF_REPO_URL = "https://github.com/frreiss/graph_def_editor.git"
+_REPO_URL = "https://github.com/CODAIT/graph_def_editor.git"
+_MY_REPO_URL = "https://github.com/frreiss/graph_def_editor.git"
 
 _USAGE = "Usage: {} [-c] <issue #>".format(sys.argv[0])
 
@@ -57,9 +57,9 @@ def main():
     branch_name = "issue-" + issue_num
 
     # Create and check out a branch
-    run(["git", "clone", _MY_TF_REPO_URL, dir_name])
+    run(["git", "clone", _MY_REPO_URL, dir_name])
     os.chdir(dir_name)
-    run(["git", "remote", "add", "upstream", _TF_REPO_URL])
+    run(["git", "remote", "add", "upstream", _REPO_URL])
 
     if create_branch:
         run(["git", "branch", branch_name])
