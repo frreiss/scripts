@@ -61,7 +61,7 @@ conda install -y scikit-learn
 # Requirements that must be installed from pip because the conda version is
 # not kept sufficiently up to date. TODO: Revisit this list and move things to
 # conda install.
-#pip install tensorflow-estimator
+pip install tensorflow-estimator
 
 # Install TensorFlow and keras-applications, both of which are also unofficial
 # requirements. We install them from pip because the version in conda-forge is
